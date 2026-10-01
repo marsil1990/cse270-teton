@@ -11,7 +11,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 
-#Somke Test
 class TestSmokeTest():
   def setup_method(self, method):
     options = Options()
@@ -42,18 +41,18 @@ class TestSmokeTest():
     self.driver.set_window_size(750, 788)
     elements = self.driver.find_elements(By.ID, "username")
     assert len(elements) > 0
+    self.driver.find_element(By.ID, "username").send_keys("Marcos")
     self.driver.find_element(By.ID, "password").click()
+    self.driver.find_element(By.ID, "password").send_keys("1111111111")
     self.driver.find_element(By.CSS_SELECTOR, ".mysubmit:nth-child(4)").click()
     assert self.driver.find_element(By.CSS_SELECTOR, ".errorMessage").text == "Invalid username and password."
   
   def test_navigatetothedirectorypage(self):
     self.driver.get("http://127.0.0.1:5500/teton/1.6/directory.html")
     self.driver.find_element(By.ID, "directory-grid").click()
-    elements = self.driver.find_elements(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)")
-    assert len(elements) > 0
+    assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)").text == "Teton Turf and Tree"
     self.driver.find_element(By.ID, "directory-list").click()
-    elements = self.driver.find_elements(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)")
-    assert len(elements) > 0
+    assert self.driver.find_element(By.CSS_SELECTOR, ".gold-member:nth-child(9) > p:nth-child(2)").text == "Teton Turf and Tree"
   
   def test_navigatetothejoinpage(self):
     self.driver.get("http://127.0.0.1:5500/teton/1.6/join.html")
@@ -74,7 +73,6 @@ class TestSmokeTest():
   def test_navigatetodehomepage(self):
     self.driver.get("http://127.0.0.1:5500/teton/1.6/index.html")
     self.driver.set_window_size(1550, 926)
-    self.driver.find_element(By.CSS_SELECTOR, "body").click()
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".spotlight1 > .centered-image")
     assert len(elements) > 0
     elements = self.driver.find_elements(By.CSS_SELECTOR, ".spotlight2 > .centered-image")
@@ -82,4 +80,5 @@ class TestSmokeTest():
     elements = self.driver.find_elements(By.LINK_TEXT, "Join Us")
     assert len(elements) > 0
     self.driver.find_element(By.XPATH, "(//a[contains(@href, \'join.html\')])[2]").click()
+    WebDriverWait(self.driver, 30).until(expected_conditions.text_to_be_present_in_element((By.CSS_SELECTOR, "legend"), "Personal Information"))
   
